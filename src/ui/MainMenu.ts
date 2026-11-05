@@ -2,6 +2,9 @@ import { onLangChange, t } from '../i18n';
 import { h, setVisible } from './dom';
 import { icon } from './icons';
 
+/** Build tanpa server multiplayer (hosting statis): hanya mode lawan komputer. */
+const OFFLINE = import.meta.env.VITE_OFFLINE === '1';
+
 export interface MenuCallbacks {
   onPlay(): void;
   onResume(): void;
@@ -24,8 +27,8 @@ export class MainMenu {
     const buttons = [
       this.canResume && h('button', { class: 'btn primary big', onclick: () => this.cb.onResume() }, icon('play'), t('menu.resume')),
       h('button', { class: `btn ${this.canResume ? '' : 'primary'} big`, onclick: () => this.cb.onPlay() }, icon('dice'), t('menu.play')),
-      h('button', { class: 'btn accent big', onclick: () => this.cb.onOnline() }, icon('globe'), t('menu.online')),
-      h('button', { class: 'btn big watch-menu', onclick: () => this.cb.onWatch() }, h('i', { class: 'live-dot' }), t('menu.watch')),
+      !OFFLINE && h('button', { class: 'btn accent big', onclick: () => this.cb.onOnline() }, icon('globe'), t('menu.online')),
+      !OFFLINE && h('button', { class: 'btn big watch-menu', onclick: () => this.cb.onWatch() }, h('i', { class: 'live-dot' }), t('menu.watch')),
       h('button', { class: 'btn big', onclick: () => this.cb.onSettings() }, icon('settings'), t('menu.settings')),
       h('button', { class: 'btn big', onclick: () => this.cb.onHowTo() }, icon('help'), t('menu.howto')),
     ];
